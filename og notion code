@@ -1,33 +1,32 @@
-int button = 2;    // select the input pin for the potentiometer
-int onOffPin = 3;      // select the pin for the LED
-int buttonSignal=LOW;
-int prevButton=LOW;
-int counter = 1;
-//int outputValue=0;
+#define LED_PIN 3
+#define BUTTON_PIN 2
+byte lastButtonState = LOW;
+byte ledState = LOW;
+
+unsigned long lastTimeButtonStateChanged = millis();
+unsigned long debounceDuration = 50
+
+
 void setup() {
-  // put your setup code here, to run once:
-   pinMode(onOffPin, OUTPUT);
-   Serial.begin(9600);
+  pinMode(LED_PIN, OUTPUT);
+  pinMode(BUTTON_PIN, INPUT);
+  lastButtonState = digitalRead(BUTTON_PIN);
 }
-
-
-
 void loop() {
-  buttonSignal = digitalRead(button);
- if((buttonSignal==HIGH)&&(prevButton==LOW)){
-    digitalWrite(onOffPin, HIGH);
-    prevButton=HIGH;
-    Serial.println("Circuit is on ");
+  if (millis() - lastTimeButtonStateChanged >= debounceDuration) {
+  byte buttonState = digitalRead(BUTTON_PIN);
+  if (buttonState != lastButtonState) {
+  lastTimeButtonStateChanged = millis();
+lastButtonState == buttonState;
+    if (buttonState == LOW) {
+      if (ledState == HIGH) {
+        ledState = LOW;
+      }
+      else {
+        ledState = HIGH;
+      }
+      digitalWrite(LED_PIN, ledState);
+    }
   }
-
-  else if((buttonSignal==HIGH)&&(prevButton==HIGH)){
-    digitalWrite(onOffPin, LOW);
-    prevButton=LOW;
-    Serial.println("Circuit is off");
-  }
-  if((digitalRead(onOffPin))==HIGH){
-    Serial.println("Circuit is on ");
-  }
-  delay(150);
-
+ }
 }
